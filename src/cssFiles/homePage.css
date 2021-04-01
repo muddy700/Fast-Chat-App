@@ -1,0 +1,22 @@
+.Home-Container {
+    /* background-color: red; */
+    height: 600px;
+    padding-top: 1%;
+}
+
+.left-card {
+    width: 30%;
+    /* background-color: green; */
+    height: 100%;
+}
+
+.right-card {
+    width: 70%;
+    /* background-color: blue; */
+    height: 100%;
+}
+
+.form-input {
+    width: 80%;
+    margin-top: 5%;
+}
