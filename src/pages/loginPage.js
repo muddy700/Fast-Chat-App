@@ -87,13 +87,14 @@ export default function Login({setCurrentUser, setRender}){
             console.log(uid);
 
             const profileRef = db.collection('user_profile');
-            var profile = profileRef.where("username", "==", user.uid);
+            var profile = profileRef.where("uid", "==", user.uid);
             profile.get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         // doc.data() is never undefined for query doc snapshots
                         console.log(doc.id, " => ", doc.data().username);
-                        // setCurrentUser(doc.data().username);
+                        setCurrentUser(doc.data().username);
+                        setRender(2)
 
                     });
                 })

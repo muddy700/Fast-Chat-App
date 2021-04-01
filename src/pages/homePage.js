@@ -34,7 +34,7 @@ export const Home = ({username})=> {
 
         const messagesRef = db.collection('messages');
         const messageData = {
-            source: 'Muddy',
+            source: username,
             destination: message.destination,
             content: message.content,
             messageDate: messageDate,
@@ -52,8 +52,23 @@ export const Home = ({username})=> {
     
    
     useEffect(() => {
-    db.collection('messages').onSnapshot(snapshot => (
+    // db.collection('messages')
+    
+    const messageRef = db.collection('messages');
+    var msg = messageRef.where("destination", "==", username);
+    msg.onSnapshot(snapshot => (
      setMessages(snapshot.docs.map((doc) => doc.data()))
+    //  .get()
+    //      .then((querySnapshot) => {
+    //          querySnapshot.forEach((doc) => {
+    //              // doc.data() is never undefined for query doc snapshots
+    //              console.log(doc.id, " => ", doc.data().source , " => ", doc.data().destination);
+    //          });
+    //      })
+    //      .catch((error) => {
+    //          console.log("Error getting messages: ", error);
+    //      });
+
     ));
    
     }, [])
@@ -63,7 +78,7 @@ export const Home = ({username})=> {
             <Grid container spacing={2} style={{height: '100%'}}>
                 <Grid item className="left-card">
                     <Card >
-                        <CardHeader title="Message Form" style={{textAlign: 'center', backgroundColor: 'teal'}}></CardHeader>
+                        <CardHeader title={username} style={{textAlign: 'center', backgroundColor: 'teal'}}></CardHeader>
                         <CardContent style={{textAlign: 'center'}} >
                             <form className="" noValidate autoComplete="off">
                                 <TextField  id="outlined-basic" name="destination" onChange={handleFormChanges} className="form-input" label="Receiver" variant="outlined" />
@@ -96,7 +111,7 @@ export const Home = ({username})=> {
                                 <CardHeader
                                     style={{width: '20%'}}
                                     avatar={<Avatar aria-label="recipe" className=""> {message.destination.charAt(0)} </Avatar> }
-                                    title ={message.destination}
+                                    title ={message.source}
                                     subheader = {message.messageTime}
                                 />
                                 <CardContent style={{textAlign: 'left', width: '80%'}}>

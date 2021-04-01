@@ -7,12 +7,10 @@ import {Home } from './pages/homePage';
 const App = () => {
 
   const [render, setRender] = useState(1)
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState('')
 
   const loginPage = <Login setCurrentUser={setCurrentUser} setRender={setRender} />
-  const homePage = <Home 
-  // username={currentUser.username}
-   />
+  const homePage = <Home username={currentUser} />
 
   const components = {
     1 : loginPage,
