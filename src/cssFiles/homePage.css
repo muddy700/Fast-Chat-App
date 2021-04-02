@@ -2,17 +2,36 @@
   position: relative;
   height: 800px;
   border-radius: 20px;
-  overflow: scroll;
+  /* overflow: scroll; */
   width: 80%;
   max-width: 500px;
-  /* scroll-snap-type: y mandatory; */
+}
+
+.message-card {
+    background-color: white;
+    position: relative;
+    width: 100%;
+    height: 75px;
+    margin-bottom: 1%;
+    display: flex;
+    scroll-snap-align: start;
 }
 
 .inbox-card {
-  background-color: white;
-  position: relative;
-  width: 100%;
-  height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    height: inherit;
+}
+
+.new-message-card {
+    height: auto;
+    width: 100%;
+}
+.new-message {
+    position: absolute;
+    float: right;
+    right: 5%;
+    display: none;
 }
 
 .form-input {
@@ -21,12 +40,12 @@
 }
 
 /* Hide scrolbar for chrome, safari and opera */
-.home-container::-webkit-scrollbar {
+.inbox-card::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrolbar for IE, Edge and Firefox */
-.home-container {
+.inbox-card {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

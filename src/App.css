@@ -17,6 +17,7 @@ code {
 
 .main-container {
   height: 100vh;
+  position: relative;
   background-color: black;
   display: grid;
   /* color: white; */

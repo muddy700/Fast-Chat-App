@@ -1,55 +1,22 @@
 import {React, useEffect, useState} from 'react'
 import {HomeHeader } from './homeHeader'
 import '../cssFiles/homePage.css';
+import ChatIcon from '@material-ui/icons/Chat';
 import {Card, Grid, TextField, Button} from '@material-ui/core';
 import {Container, Avatar, CardHeader, CardContent, Typography, Box, Fab, IconButton, Menu, MenuItem } from '@material-ui/core';
 // import firebase from '../firebase'
+import {CreateMessage} from './createMessage'
+import { Profile} from './profilePage'
 import db from '../firebase'
 
 
-export const Home = ({username})=> {
-    const initialMessage = {
-        source : 'Source',
-        destination : 'Destination',
-        content :'Contents Of The Message',
-        messageDate : '12/4/2021',
-        messageTime : '21:00',
-        message_id : 'Id1'
-    };
+export const Home = ({username, setCurrentUser, setRender})=> {
+ 
     const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState(initialMessage);
+    const [activeCard, setActiveCard] = useState(1)
     // const [messageForm] = form.useForm();
 
-    const handleFormChanges = (e) => {
-        setMessage({...message, [e.target.name] : e.target.value})
-        
-    }
 
-    const sendMessage = (e) => {
-        e.preventDefault();
-        // console.log('Message Sent');
-        const currentTime = new Date();
-        const messageDate = currentTime.toLocaleDateString();
-        const messageTime = currentTime.toLocaleTimeString();
-
-        const messagesRef = db.collection('messages');
-        const messageData = {
-            source: username,
-            destination: message.destination,
-            content: message.content,
-            messageDate: messageDate,
-            messageTime: messageTime
-        }
-        messagesRef.add(messageData)
-        .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-        setMessage('');
-    }
-    
    
     useEffect(() => {
     // db.collection('messages')
@@ -62,30 +29,55 @@ export const Home = ({username})=> {
    
     }, [])
 
+    const signOut = () => {
+        setRender(1)
+        setCurrentUser('No Logged User');
+        setMessages([]);
+        setActiveCard(1);
+    }
+
+    const allowMessageCreation = () => {
+        setActiveCard(2)
+    }
+    const inbox = <div>
+            <HomeHeader messageCounter={messages.length} signOut={signOut} setActiveCard={setActiveCard}  />
+            <CardContent className="inbox-card" >
+                {messages.map((message) => (
+                <Card className="message-card">
+                    <CardHeader
+                        style={{width: '80%'}}
+                        avatar={<Avatar aria-label="recipe" className="">
+                        {message.source.charAt(0)} </Avatar> }
+                        title ={message.source}
+                        subheader = {message.content}
+                    />
+                    <CardContent style={{width: '20%'}}>
+                        <p>{message.messageTime} </p>
+                    </CardContent>
+                </Card>
+                    ))}
+            <Fab 
+                color="primary" 
+                aria-label="add" 
+                onClick={allowMessageCreation}
+                // hidden={activeCard === 1 ? false : true}
+                className="new-message">
+                <ChatIcon />
+            </Fab>
+            </CardContent>
+        </div>;
+
+    const newMessage = <CreateMessage setActiveCard={setActiveCard} username={username} />;
+    const profile = <Profile  setActiveCard={setActiveCard} username={username} />;
+    const contents = {
+        1 : inbox,
+        2 : newMessage,
+        3 : profile
+    }
+
     return (
-        <div className="home-container" >
-                
-                    <Card className="inbox-card">
-                        {/* <CardHeader title="Messages" style={{textAlign: 'center', backgroundColor: 'teal'}}></CardHeader> */}
-                        <HomeHeader />
-                            {messages.map((message) => (
-                        <CardContent style={{textAlign: 'center'}} >
-                                <Card style={{display: 'flex'}}>
-                                <CardHeader
-                                    style={{width: '20%'}}
-                                    avatar={<Avatar aria-label="recipe" className=""> {message.source.charAt(0)} </Avatar> }
-                                    title ={message.source}
-                                    subheader = {message.messageTime}
-                                />
-                                <CardContent style={{textAlign: 'left', width: '80%'}}>
-                                    <p>{message.content} </p>
-                                </CardContent>
-                            </Card>
-                        </CardContent>
-                             )) }
-                    </Card>
-        </div>
-        
-        
+    <Card className="home-container">
+        { contents[activeCard] } 
+    </Card>
     )
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import SignUp from './signUpPage'
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -58,33 +59,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login({setCurrentUser, setRender}){
   const classes = useStyles();
+  const [signBit, setSignBit] = useState(1)
+  
 
+  const changeForm = () => {
+    setSignBit(2)
+  }
   const onFinish = (e) => {
     e.preventDefault()
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    // firebase.auth().createUserWithEmailAndPassword(email, password)
-    //     .then((userCredential) => {
-    //         // Signed in 
-    //         var user = userCredential.user;
-    //         console.log('user created : ' + user)
-    //         // ...
-    //     })
-    //     .catch((error) => {
-    //         var errorCode = error.code;
-    //         var errorMessage = error.message;
-    //         console.log('Serror Occured : ' + errorMessage)
-
-            
-    //     });
-
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in
             var user = userCredential.user;
-            const uid = user.uid;
-            console.log(uid);
+            // const uid = user.uid;
+            console.log('Logged Successful...');
 
             const profileRef = db.collection('user_profile');
             var profile = profileRef.where("uid", "==", user.uid);
@@ -92,32 +83,24 @@ export default function Login({setCurrentUser, setRender}){
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         // doc.data() is never undefined for query doc snapshots
-                        console.log(doc.id, " => ", doc.data().username);
+                        console.log(doc.data().username + "'s Profile Obtained");
                         setCurrentUser(doc.data().username);
                         setRender(2)
 
                     });
                 })
                 .catch((error) => {
-                    console.log("Error getting documents: ", error);
+                    console.log("Error getting User Profile: ", error);
                 });
-            // console.log(profile.username)
-
         })
         .catch((error) => {
-            var errorCode = error.code;
+            // var errorCode = error.code;
             var errorMessage = error.message;
-            console.log('Serror Occured : ' + errorMessage)
+            console.log('Logging In Failed. Error Occured : ' + errorMessage)
         });
-
-
-
   }
 
-  return (
-    <Container component="main" maxWidth="xs" className="login-container">
-      <CssBaseline />
-      <div className={classes.paper}>
+  const signin =       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -147,10 +130,10 @@ export default function Login({setCurrentUser, setRender}){
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
@@ -161,19 +144,37 @@ export default function Login({setCurrentUser, setRender}){
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Button
+                type="link"
+                fullWidth
+                variant="text"
+                color="primary"
+                onClick={changeForm}
+              >
+                Don 't have an account? Sign Up
+              </Button>
             </Grid>
           </Grid>
         </form>
       </div>
+
+  const signup = <SignUp setSignBit={setSignBit} />;
+
+  const formContent = {
+    1 : signin ,
+    2 : signup
+  }
+
+  return (
+    <Container component="main" maxWidth="xs" className="login-container">
+      <CssBaseline />
+      {formContent[signBit]}
       <Box mt={8}>
         <Copyright />
       </Box>

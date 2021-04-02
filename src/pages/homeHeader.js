@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const HomeHeader = () => {
+export const HomeHeader = ({messageCounter, signOut, setActiveCard}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -101,6 +101,16 @@ export const HomeHeader = () => {
     handleMobileMenuClose();
   };
 
+  const logOut = () => {
+    signOut();
+    handleMenuClose();
+  }
+
+  const showProfile = () => {
+    handleMenuClose();
+    setActiveCard(3);
+  }
+
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -116,8 +126,8 @@ export const HomeHeader = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
+      <MenuItem onClick={showProfile}>Profile</MenuItem>
+      <MenuItem onClick={logOut}>Sign Out</MenuItem>
     </Menu>
   );
 
@@ -134,7 +144,7 @@ export const HomeHeader = () => {
     >
       <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
+          <Badge badgeContent={messageCounter} color="secondary">
             <MailIcon />
           </Badge>
         </IconButton>
@@ -172,7 +182,7 @@ export const HomeHeader = () => {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={messageCounter} color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
