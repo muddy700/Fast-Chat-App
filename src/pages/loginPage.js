@@ -115,7 +115,7 @@ export default function Login({setCurrentUser, setRender}){
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" className="login-container">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

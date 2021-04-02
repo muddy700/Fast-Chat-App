@@ -6,8 +6,8 @@ import {Home } from './pages/homePage';
 
 const App = () => {
 
-  const [render, setRender] = useState(1)
-  const [currentUser, setCurrentUser] = useState('')
+  const [render, setRender] = useState(2)
+  const [currentUser, setCurrentUser] = useState('chagga')
 
   const loginPage = <Login setCurrentUser={setCurrentUser} setRender={setRender} />
   const homePage = <Home username={currentUser} />
@@ -18,7 +18,7 @@ const App = () => {
   }
 
   return (
-    <div> {components[render]} </div>
+    <div className="main-container"> {components[render]} </div>
   );
 }
 

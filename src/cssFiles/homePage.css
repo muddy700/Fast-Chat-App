@@ -1,22 +1,32 @@
-.Home-Container {
-    /* background-color: red; */
-    height: 600px;
-    padding-top: 1%;
+.home-container {
+  position: relative;
+  height: 800px;
+  border-radius: 20px;
+  overflow: scroll;
+  width: 80%;
+  max-width: 500px;
+  /* scroll-snap-type: y mandatory; */
 }
 
-.left-card {
-    width: 30%;
-    /* background-color: green; */
-    height: 100%;
-}
-
-.right-card {
-    width: 70%;
-    /* background-color: blue; */
-    height: 100%;
+.inbox-card {
+  background-color: white;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .form-input {
     width: 80%;
     margin-top: 5%;
+}
+
+/* Hide scrolbar for chrome, safari and opera */
+.home-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrolbar for IE, Edge and Firefox */
+.home-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -58,59 +58,22 @@ export const Home = ({username})=> {
     var msg = messageRef.where("destination", "==", username);
     msg.onSnapshot(snapshot => (
      setMessages(snapshot.docs.map((doc) => doc.data()))
-    //  .get()
-    //      .then((querySnapshot) => {
-    //          querySnapshot.forEach((doc) => {
-    //              // doc.data() is never undefined for query doc snapshots
-    //              console.log(doc.id, " => ", doc.data().source , " => ", doc.data().destination);
-    //          });
-    //      })
-    //      .catch((error) => {
-    //          console.log("Error getting messages: ", error);
-    //      });
-
     ));
    
     }, [])
 
     return (
-        <Container className="Home-Container">
-            <Grid container spacing={2} style={{height: '100%'}}>
-                <Grid item className="left-card">
-                    <Card >
-                        <CardHeader title={username} style={{textAlign: 'center', backgroundColor: 'teal'}}></CardHeader>
-                        <CardContent style={{textAlign: 'center'}} >
-                            <form className="" noValidate autoComplete="off">
-                                <TextField  id="outlined-basic" name="destination" onChange={handleFormChanges} className="form-input" label="Receiver" variant="outlined" />
-                                <TextField
-                                 style={{marginTop: 20}} 
-                                 id="outlined-basic" 
-                                 name="content"
-                                 className="form-input"
-                                 label="Content" 
-                                 variant="outlined"
-                                 multiline
-                                 rows={5}
-                                 onChange={handleFormChanges}
-                                 // error
-                                 // helperText="Error Message" 
-
-                                />
-                                <Button style={{marginTop: 20}} onClick={sendMessage} variant="contained" color="primary" className="form-input" href="" > Send </Button>
-                            </form>
-
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item className="right-card">
-                    <Card >
-                        <CardHeader title="Messages" style={{textAlign: 'center', backgroundColor: 'teal'}}></CardHeader>
+        <div className="home-container" >
+                
+                    <Card className="inbox-card">
+                        {/* <CardHeader title="Messages" style={{textAlign: 'center', backgroundColor: 'teal'}}></CardHeader> */}
+                        <HomeHeader />
                             {messages.map((message) => (
                         <CardContent style={{textAlign: 'center'}} >
                                 <Card style={{display: 'flex'}}>
                                 <CardHeader
                                     style={{width: '20%'}}
-                                    avatar={<Avatar aria-label="recipe" className=""> {message.destination.charAt(0)} </Avatar> }
+                                    avatar={<Avatar aria-label="recipe" className=""> {message.source.charAt(0)} </Avatar> }
                                     title ={message.source}
                                     subheader = {message.messageTime}
                                 />
@@ -121,9 +84,7 @@ export const Home = ({username})=> {
                         </CardContent>
                              )) }
                     </Card>
-                </Grid>
-            </Grid>
-        </Container>
+        </div>
         
         
     )

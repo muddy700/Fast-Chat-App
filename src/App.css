@@ -14,3 +14,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.main-container {
+  height: 100vh;
+  background-color: black;
+  display: grid;
+  /* color: white; */
+  place-items: center;
+}
+
+.login-container {
+  position: relative;
+  height: 800px;
+  border-radius: 20px;
+  overflow: scroll;
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+}
+
+/* Hide scrolbar for chrome, safari and opera */
+.login-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrolbar for IE, Edge and Firefox */
+.login-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
