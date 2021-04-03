@@ -62,10 +62,9 @@ export const Home = ({username, setCurrentUser, setRender})=> {
         // setSenders(uniqueSenders);
     }
 
-    const openChatMessages = (e) => {
-        e.stopPropagation();
-        console.log('sender')
-        // setActiveCard(4)
+    const openChatMessages = (sender) => {
+        setSelectedChat(sender)
+        setActiveCard(4)
     }
 
 
@@ -79,16 +78,17 @@ export const Home = ({username, setCurrentUser, setRender})=> {
                         <Card 
                             className="message-card" 
                             key={mb} 
-                            onClick={openChatMessages(), setSelectedChat(mb)}>
+                            onClick={e => {e.preventDefault(); openChatMessages(mb)}}
+                            >
                             <CardHeader
                                 style={{width: '80%'}}
                                 avatar={<Avatar aria-label="recipe" className="">
                                 {mb.charAt(0).toUpperCase()} </Avatar> }
                                 title ={mb}
-                                subheader = {mb}
+                                subheader = "Click To View The Message"
                             />
                             <CardContent style={{width: '20%'}}>
-                                <p>{mb}</p>
+                                <p>Time</p>
                             </CardContent>
                         </Card>
                             ))}
@@ -122,7 +122,7 @@ export const Home = ({username, setCurrentUser, setRender})=> {
 
     const newMessage = <CreateMessage setActiveCard={setActiveCard} username={username} />;
     const profile = <Profile  setActiveCard={setActiveCard} username={username} />;
-    const chatPage = <ChatPage setActiveCard={setActiveCard} username={username} chatMate="Muddy" />
+    const chatPage = <ChatPage setActiveCard={setActiveCard} username={username} chatMate={selectedChat} />
     const contents = {
         1 : inbox,
         2 : newMessage,

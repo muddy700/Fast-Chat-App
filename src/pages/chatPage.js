@@ -60,18 +60,34 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
 
       useEffect(() => {
           const messageRef = db.collection('messages');
-          var msg1 = messageRef.where("destination", "==", username).where("source", "==", chatMate);
-          var msg2 = messageRef.where("source", "==", username).where("destination", "==", chatMate);
+          var msg1 = messageRef.where("destination", "==", username).where("source", "==", chatMate)
+          .orderBy("dateCreated");
+          var msg2 = messageRef.where("source", "==", username).where("destination", "==", chatMate)
+          .orderBy("dateCreated");
 
           msg1.onSnapshot(snapshot => (
               setIncomingMessages(  snapshot.docs.map((doc) => doc.data()  ))
+            //   setIncomingMessages(  snapshot.docs.map((doc) => doc.data()  ))
           ));
 
           msg2.onSnapshot(snapshot => (
               setOutgoingMessages(snapshot.docs.map((doc) => doc.data()))
+            //   setOutgoingMessages(snapshot.docs.map((doc) => doc.data()))
+            //   console.log('out mesg added')
           ));
 
       }, [])
+
+      // console.log(outgoingMessages)
+//       const nch = incomingMessages.concat(outgoingMessages)
+//       console.log('b4')
+//       console.log(nch)
+
+//       console.log('after')
+//       const sorted =nch.sort((a, b) => b.messageTime - a.messageT)
+
+//   console.log(sorted)
+
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -79,12 +95,14 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
         const currentTime = new Date();
         const messageDate = currentTime.toLocaleDateString();
         const messageTime = currentTime.toLocaleTimeString();
+        const dateCreated = currentTime.toLocaleString();
 
         const messagesRef = db.collection('messages');
         const messageData = {
             source: username,
             destination: chatMate,
             content: message.content,
+            dateCreated: dateCreated,
             messageDate: messageDate,
             messageTime: messageTime
         }

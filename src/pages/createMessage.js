@@ -24,12 +24,14 @@ export const CreateMessage = ({username, setActiveCard}) => {
         const currentTime = new Date();
         const messageDate = currentTime.toLocaleDateString();
         const messageTime = currentTime.toLocaleTimeString();
+        const dateCreated = currentTime.toLocaleString();
 
         const messagesRef = db.collection('messages');
         const messageData = {
             source: username,
             destination: message.destination,
             content: message.content,
+            dateCreated: dateCreated,
             messageDate: messageDate,
             messageTime: messageTime
         }
