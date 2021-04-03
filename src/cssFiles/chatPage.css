@@ -1,0 +1,36 @@
+.incoming-messages {
+    background-color: lightgray;
+}
+.outgoing-messages, .incoming-messages {
+    height: auto;
+    padding: 2%;
+    width: fit-content;
+    max-width: 80%;
+    border-radius: 10px;
+    clear: both;
+    margin-bottom: 2%;
+}
+.outgoing-messages {
+    background-color: lightblue;
+    float: right;
+}
+
+.chat-container {
+    padding: 2%;
+    overflow-y: auto;
+    height: auto;
+    max-height: 82vh;
+    min-height: 74vh;
+    /* height: 82vh; */
+}
+
+/* Hide scrolbar for chrome, safari and opera */
+.chat-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrolbar for IE, Edge and Firefox */
+.chat-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -13,7 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+// import MoreIcon from '@material-ui/icons/MoreVert';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     // display: 'none',
-    paddingLeft : '20%',
+    paddingLeft : '8%',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
@@ -198,6 +198,11 @@ export const HomeHeader = ({messageCounter, signOut, setActiveCard}) => {
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={messageCounter} color="secondary">
+                <MailIcon />
+              </Badge>
+            </IconButton>
             <IconButton
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -205,7 +210,7 @@ export const HomeHeader = ({messageCounter, signOut, setActiveCard}) => {
               onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <AccountCircle />
             </IconButton>
           </div>
         </Toolbar>

@@ -1,26 +1,10 @@
 import {React, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import {Card, Grid, TextField, Button, CardContent} from '@material-ui/core';
+import {Card, TextField, Button, CardContent} from '@material-ui/core';
 import db from '../firebase'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-}));
+import { MiniHeader } from './miniHeader';
 
 export const CreateMessage = ({username, setActiveCard}) => {
-  const classes = useStyles();
-     const initialMessage = {
+    const initialMessage = {
         source : 'Source',
         destination : 'Destination',
         content :'Contents Of The Message',
@@ -30,10 +14,8 @@ export const CreateMessage = ({username, setActiveCard}) => {
     };
     const [message, setMessage] = useState(initialMessage);
 
-
     const handleFormChanges = (e) => {
         setMessage({...message, [e.target.name] : e.target.value})
-        
     }
 
     const sendMessage = (e) => {
@@ -62,29 +44,9 @@ export const CreateMessage = ({username, setActiveCard}) => {
         setActiveCard(1);
     }
     
-    const backToInbox = () => {
-        setActiveCard(1);
-    }
-
   return (
       <Card className="new-message-card">
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar variant="dense">
-                    <IconButton 
-                        edge="start" 
-                        className={classes.menuButton} 
-                        color="inherit"
-                        onClick={backToInbox} 
-                        aria-label="menu">
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <Typography variant="h6" color="inherit">
-                        Create A Message
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-        </div>
+       <MiniHeader title="Create a Message" setActiveCard={setActiveCard} />
         <CardContent style={{textAlign: 'center'}} >
             <form className="" noValidate autoComplete="off">
                 <TextField  
