@@ -14,6 +14,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    display: 'none',
+    // display: 'none',
     paddingLeft : '20%',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -142,15 +144,7 @@ export const HomeHeader = ({messageCounter, signOut, setActiveCard}) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={messageCounter} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={showProfile}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -160,6 +154,12 @@ export const HomeHeader = ({messageCounter, signOut, setActiveCard}) => {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={logOut}>
+        <IconButton aria-label="Log out" color="inherit">
+          <PowerSettingsNewIcon />
+        </IconButton>
+        <p>Sign Out</p>
       </MenuItem>
     </Menu>
   );

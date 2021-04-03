@@ -5,7 +5,7 @@ import {Home } from './pages/homePage';
 
 const App = () => {
 
-  const [render, setRender] = useState(1)
+  const [render, setRender] = useState(2)
   const [currentUser, setCurrentUser] = useState('husna')
 
   const loginPage = <Login setCurrentUser={setCurrentUser} setRender={setRender} />

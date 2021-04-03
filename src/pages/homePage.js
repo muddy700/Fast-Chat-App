@@ -41,7 +41,8 @@ export const Home = ({username, setCurrentUser, setRender})=> {
     }
     const inbox = <div>
             <HomeHeader messageCounter={messages.length} signOut={signOut} setActiveCard={setActiveCard}  />
-            <CardContent className="inbox-card" >
+            {/* <CardContent */}
+            <div className="inbox-card" >
                 {messages.map((message) => (
                 <Card className="message-card">
                     <CardHeader
@@ -60,11 +61,11 @@ export const Home = ({username, setCurrentUser, setRender})=> {
                 color="primary" 
                 aria-label="add" 
                 onClick={allowMessageCreation}
-                // hidden={activeCard === 1 ? false : true}
                 className="new-message">
                 <ChatIcon />
             </Fab>
-            </CardContent>
+            </div>
+            {/* </CardContent> */}
         </div>;
 
     const newMessage = <CreateMessage setActiveCard={setActiveCard} username={username} />;

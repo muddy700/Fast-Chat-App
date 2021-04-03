@@ -1,9 +1,10 @@
 .home-container {
   position: relative;
-  height: 800px;
+  height: 100vh;
+  /* height: 600px; */
   border-radius: 20px;
   /* overflow: scroll; */
-  width: 80%;
+  width: 100%;
   max-width: 500px;
 }
 
@@ -20,7 +21,8 @@
 .inbox-card {
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
-    height: inherit;
+    height: 90vh;
+    /* height: inherit; */
 }
 
 .new-message-card {
