@@ -9,6 +9,8 @@ import {CreateMessage} from './createMessage'
 import {ChatPage} from './chatPage'
 import { Profile} from './profilePage'
 import db from '../firebase'
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 
 export const Home = ({username, setCurrentUser, setRender})=> {
@@ -109,14 +111,15 @@ export const Home = ({username, setCurrentUser, setRender})=> {
                             </CardContent>
                         </Card>
                             ))} */}
-
-                        <Fab 
-                            color="primary" 
-                            aria-label="add" 
-                            onClick={allowMessageCreation}
-                            className="new-message">
-                            <ChatIcon />
-                        </Fab>
+                        <Tooltip title="Start Chat" placement="top" arrow>
+                            <Fab 
+                                color="primary" 
+                                aria-label="add" 
+                                onClick={allowMessageCreation}
+                                className="new-message">
+                                <ChatIcon />
+                            </Fab>
+                        </Tooltip>
                     </div>
                   </div>;
 

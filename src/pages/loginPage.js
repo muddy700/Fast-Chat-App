@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -13,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SignUp from './signUpPage'
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -36,6 +36,10 @@ function Copyright() {
 //End Of Copyright Function
 
 const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -70,7 +74,15 @@ export default function Login({setCurrentUser, setRender}){
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
   const [isFormClear, setIsFormClear] = useState(false)
+  const [openBackDrop, setOpenBackDrop] = useState(false)
   
+  const closeBackDrop = () => {
+    setOpenBackDrop(false);
+  };
+
+  // const handleToggle = () => {
+  //   setOpenBackDrop(!openBackDrop);
+  // };
 
   const changeForm = () => {
     setSignBit(2)
@@ -122,6 +134,7 @@ export default function Login({setCurrentUser, setRender}){
   }
   const onFinish = (e) => {
     e.preventDefault()
+    setOpenBackDrop(true)
     const validation = formValidator(e);
     // console.log(validation)
     const email = e.target.email.value;
@@ -145,11 +158,13 @@ export default function Login({setCurrentUser, setRender}){
                 setCurrentUser(doc.data().username);
                 setRender(2)
                 setLoginCredentials(credentials)
+                setOpenBackDrop(false);
 
                     });
                 })
                 .catch((error) => {
                     console.log("Error getting User Profile: ", error);
+                    setOpenBackDrop(false)
                 });
         })
         .catch((error) => {
@@ -157,12 +172,15 @@ export default function Login({setCurrentUser, setRender}){
             //Check Error Codes To Modify Message
             var errorMessage = error.message;
             console.log('Logging In Failed. Error Occured : ' + errorMessage)
+            setOpenBackDrop(false)
             setEmailerror(true)
             setEmailErrorMessage('Incorrect Email Or Password!')
+            
         });
     }
     else {
       console.log('The Login Form Is Invalid')
+      setOpenBackDrop(false)
     }
   }
 
@@ -236,7 +254,10 @@ export default function Login({setCurrentUser, setRender}){
         </form>
       </div>
 
-  const signup = <SignUp setSignBit={setSignBit} />;
+  const signup = <SignUp 
+      setSignBit={setSignBit} 
+      setOpenBackDrop={setOpenBackDrop}
+      />;
 
   const formContent = {
     1 : signin ,
@@ -250,6 +271,13 @@ export default function Login({setCurrentUser, setRender}){
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Backdrop 
+        className={classes.backdrop} 
+        open={openBackDrop} 
+        // onClick={closeBackDrop}
+        >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 }

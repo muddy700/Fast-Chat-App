@@ -1,17 +1,14 @@
 import {React, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -20,6 +17,10 @@ import "firebase/firestore";
 import db from '../firebase'
 
 const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 //End Of Styles 
 
-export default function SignUp({setSignBit}){
+export default function SignUp({setSignBit, setOpenBackDrop}){
   const classes = useStyles();
   const credentials = {
       username : '',
@@ -109,9 +110,9 @@ export default function SignUp({setSignBit}){
       setPasswordErrorMessage('Password Cannot Be Blank!')
       return false;
     }
-    else if(password.length < 4) {
+    else if(password.length < 6) {
       setPasswordError(true)
-      setPasswordErrorMessage('Use AtLeast Four Characters')
+      setPasswordErrorMessage('Use AtLeast Six Characters')
       return false;
     }
     //  if (!(/^[a-zA-Z]*$/.test(secondKey.value)))
@@ -143,71 +144,47 @@ export default function SignUp({setSignBit}){
   }
   const onFinish = (e) => {
     e.preventDefault();
+    setOpenBackDrop(true)
     const validation = formValidator(e);
     // console.log(validation)
-    setIsNameTaken(false);
     const email = e.target.email.value;
     const password = e.target.password.value;
     const username = e.target.username.value;
-    
     const profileRef = db.collection('user_profile');
-    // var profile = profileRef.where("username", "==", username);
-    // console.log(profile);
-    // profile.get()
-    //     .then((querySnapshot) => {
-      //         querySnapshot.forEach((doc) => {
-        //             // doc.data() is never undefined for query doc snapshots
-        //             console.log(doc.id, " => ", doc.data().username);
-        //             if(doc.id !== '' && doc.data().username === username){
-          //                 setIsNameTaken(true)
-          //                 console.log(' Name Already Exist')
-          //                 // return "false";
-    //             }
-    //             else{
-    //                 console.log('Name Is Available')
-    //                 // return "true";
-    //             }
-    
-    //         });
-    //     })
-    //     .catch((error) => {
-      //         console.log("Error getting Profile: ", error);
-      //     });
-      
-      //else
-      if(validation) {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Signed in 
-          console.log('User Created Successful')
-          var user = userCredential.user;
-          
-          //Create UserProfile
-          const newProfile = {
-            uid: user.uid,
-            username : username
-          }
-          
-          profileRef.add(newProfile)
-          .then((docRef) => {
-            console.log("Profile Created Successful ");
-            setSignBit(1);
-            setSignUpCredentials({ username : '', email : '', password : '' })
-                    })
-                    .catch((error) => {
-                        console.error("Error While Creating Profile: ", error);
-                    });
 
-            })
-            .catch((error) => {
-                // var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log('Error While Creating User ' + errorMessage)
-                // ..
-            });
-        }
-        else {
-          console.log('The Sign Up Form Is Not Valid')
+    if(validation) {
+        profileRef.where('username', '==', username).get()
+          .then(snapshot => {
+            if (snapshot.empty) {
+                  return firebase.auth().createUserWithEmailAndPassword(email, password);
+            } 
+            else {
+                  setOpenBackDrop(false);
+                  setUsernameError(true);
+                  setUsernameErrorMessage('Username Already Taken')
+            } 
+          })
+          .then(createdUser => {
+            if(createdUser) {
+            const id = createdUser.user.uid;
+            
+            //Create UserProfile
+            profileRef.doc(id).set({username: username, uid: id})
+            .then((docRef) => {
+              setSignBit(1);
+              setOpenBackDrop(false);
+              setSignUpCredentials(credentials) })
+            .catch((error) => {setOpenBackDrop(false)});
+          }})
+          .catch((error) => {
+            setOpenBackDrop(false);
+            if (error.code === "auth/email-already-in-use") {
+              setEmailerror(true);
+              setEmailErrorMessage('The Email Is Already In Use') } });
+            }
+      else {
+        console.log('The Sign Up Form Is Not Valid')
+        setOpenBackDrop(false);
         }
   }
 
