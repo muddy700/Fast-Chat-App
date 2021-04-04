@@ -63,7 +63,7 @@ export default function Login({setCurrentUser, setRender}){
     email : '',
     password : ''
   }
-  const [signBit, setSignBit] = useState(1)
+  const [signBit, setSignBit] = useState(2)
   const [loginCredentials, setLoginCredentials] = useState(credentials)
   const [emailError, setEmailerror] = useState(false)
   const [passwordError, setpasswordError] = useState(false)
@@ -162,7 +162,7 @@ export default function Login({setCurrentUser, setRender}){
         });
     }
     else {
-      console.log('The Form Is Invalid')
+      console.log('The Login Form Is Invalid')
     }
   }
 
