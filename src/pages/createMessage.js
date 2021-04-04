@@ -3,7 +3,7 @@ import {Card, TextField, Button, CardContent} from '@material-ui/core';
 import db from '../firebase'
 import { MiniHeader } from './miniHeader';
 
-export const CreateMessage = ({username, setActiveCard}) => {
+export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
     const initialMessage = {
         source : '',
         destination : '',
@@ -67,17 +67,16 @@ export const CreateMessage = ({username, setActiveCard}) => {
             }
             messagesRef.add(messageData)
             .then((docRef) => {
-                    console.log("Message Sent Successful ");
-                    setMessage(initialMessage)
+                setSelectedChat(message.destination);
+                setActiveCard(4);
+                setMessage(initialMessage)
                 })
                 .catch((error) => {
-                    console.error("Error Sending Message: ", error);
                 });
-            setMessage(initialMessage);
-            // setActiveCard(1);
+            // setMessage(initialMessage);
         }
         else {
-            console.log('Message Form Is Not Valid')
+            // console.log('Message Form Is Not Valid')
         }
     }
     

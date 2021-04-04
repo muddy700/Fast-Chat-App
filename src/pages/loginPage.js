@@ -145,16 +145,11 @@ export default function Login({setCurrentUser, setRender}){
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        // const uid = user.uid;
-            console.log('Logged Successful...');
-            
             const profileRef = db.collection('user_profile');
             var profile = profileRef.where("uid", "==", user.uid);
             profile.get()
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.data().username + "'s Profile Obtained");
                 setCurrentUser(doc.data().username);
                 setRender(2)
                 setLoginCredentials(credentials)
@@ -163,15 +158,10 @@ export default function Login({setCurrentUser, setRender}){
                     });
                 })
                 .catch((error) => {
-                    console.log("Error getting User Profile: ", error);
                     setOpenBackDrop(false)
                 });
         })
         .catch((error) => {
-            // var errorCode = error.code;
-            //Check Error Codes To Modify Message
-            var errorMessage = error.message;
-            console.log('Logging In Failed. Error Occured : ' + errorMessage)
             setOpenBackDrop(false)
             setEmailerror(true)
             setEmailErrorMessage('Incorrect Email Or Password!')

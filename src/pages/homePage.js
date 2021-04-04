@@ -20,13 +20,8 @@ export const Home = ({username, setCurrentUser, setRender})=> {
     const [senders, setSenders] = useState([])
     const [senderMessages, setSenderMessages] = useState([])
     const [selectedChat, setSelectedChat] = useState('')
-    // const [messageForm] = form.useForm();
-
-
    
     useEffect(() => {
-    // db.collection('messages')
-    
     const messageRef = db.collection('messages');
     var msg = messageRef.where("destination", "==", username);
     msg.onSnapshot(snapshot => (
@@ -37,10 +32,6 @@ export const Home = ({username, setCurrentUser, setRender})=> {
    
     // getSenders()
 }, [])
-
-// useEffect(() => {
-       
-//     }, [messages.length])
 
     const getSenderMessages = () => {
         // var sm = [];
@@ -94,23 +85,6 @@ export const Home = ({username, setCurrentUser, setRender})=> {
                             </CardContent>
                         </Card>
                             ))}
-                        {/* {senderMessages.map((mb) => (
-                        <Card 
-                            className="message-card" 
-                            key={mb.sender} 
-                            onClick={openChatMessages(mb.sender)}>
-                            <CardHeader
-                                style={{width: '80%'}}
-                                avatar={<Avatar aria-label="recipe" className="">
-                                {mb.sender.charAt(0).toUpperCase()} </Avatar> }
-                                title ={mb.sender}
-                                subheader = {mb[0].content}
-                            />
-                            <CardContent style={{width: '20%'}}>
-                                <p>{mb[0].messageTime}</p>
-                            </CardContent>
-                        </Card>
-                            ))} */}
                         <Tooltip title="Start Chat" placement="top" arrow>
                             <Fab 
                                 color="primary" 
@@ -123,7 +97,7 @@ export const Home = ({username, setCurrentUser, setRender})=> {
                     </div>
                   </div>;
 
-    const newMessage = <CreateMessage setActiveCard={setActiveCard} username={username} />;
+    const newMessage = <CreateMessage setActiveCard={setActiveCard} username={username} setSelectedChat={setSelectedChat} />;
     const profile = <Profile  setActiveCard={setActiveCard} username={username} />;
     const chatPage = <ChatPage setActiveCard={setActiveCard} username={username} chatMate={selectedChat} />
     const contents = {
