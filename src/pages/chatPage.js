@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         marginBottom: '5%',
         alignItems: 'center',
-        backgroundColor: 'gray',
+        backgroundColor: 'lightgray',
     },
     input: {
         marginLeft: 2,
@@ -41,12 +41,12 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
       const classes = useStyles();
 
     const initialMessage = {
-        source : 'Source',
-        destination : 'Destination',
-        content :'Contents Of The Message',
-        messageDate : '12/4/2021',
-        messageTime : '21:00',
-        message_id : 'Id1'
+        source : '',
+        destination : '',
+        content :'',
+        messageDate : '',
+        messageTime : '',
+        dateCreated : ''
     };
     const [message, setMessage] = useState(initialMessage);
     const [incomingMessages, setIncomingMessages] = useState([])
@@ -54,6 +54,7 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
     // const [chatMessages, setChatMessages] = useState(incomingMessages.concat(outgoingMessages))
 
     const handleFormChanges = (e) => {
+        e.preventDefault();
         setMessage({...message, [e.target.name] : e.target.value})
         
     }
@@ -109,11 +110,11 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
         messagesRef.add(messageData)
         .then((docRef) => {
                 console.log("Message Sent Successful ");
+                setMessage(initialMessage);
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
             });
-        setMessage('');
         // setActiveCard(1);
     }
     
@@ -134,12 +135,15 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
                     placeholder = "Reply Here.."
                     name="content"
                     autoFocus
+                    value={message.content}
                     onChange={handleFormChanges}
                 />
                 <Divider className={classes.divider} orientation="vertical" />
                 <IconButton type="submit" 
                     className={classes.iconButton} 
                     aria-label="send"
+                    color="primary"
+                    disabled={!message.content ? true : false} 
                     onClick={sendMessage}>
                     <SendIcon />
                 </IconButton>

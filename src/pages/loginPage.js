@@ -63,10 +63,10 @@ export default function Login({setCurrentUser, setRender}){
     email : '',
     password : ''
   }
-  const [signBit, setSignBit] = useState(2)
+  const [signBit, setSignBit] = useState(1)
   const [loginCredentials, setLoginCredentials] = useState(credentials)
   const [emailError, setEmailerror] = useState(false)
-  const [passwordError, setpasswordError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
   const [isFormClear, setIsFormClear] = useState(false)
@@ -83,7 +83,7 @@ export default function Login({setCurrentUser, setRender}){
       setEmailerror(false)
     }
     if(e.target.name === 'password') {
-      setpasswordError(false)
+      setPasswordError(false)
     }
   }
 
@@ -106,14 +106,14 @@ export default function Login({setCurrentUser, setRender}){
       return false;
     }
     else if(password === '') {
-      setpasswordError(true)
+      setPasswordError(true)
       setPasswordErrorMessage('Password Cannot Be Blank!')
       return false;
     }
     else {
       // setLoginCredentials({ email : '', password : '' })
       setEmailerror(false);
-      setpasswordError(false);
+      setPasswordError(false);
       setEmailErrorMessage('');
       setPasswordErrorMessage('');
       return true;
@@ -123,7 +123,7 @@ export default function Login({setCurrentUser, setRender}){
   const onFinish = (e) => {
     e.preventDefault()
     const validation = formValidator(e);
-    console.log(validation)
+    // console.log(validation)
     const email = e.target.email.value;
     const password = e.target.password.value;
     
@@ -134,17 +134,17 @@ export default function Login({setCurrentUser, setRender}){
         var user = userCredential.user;
         // const uid = user.uid;
             console.log('Logged Successful...');
-            setLoginCredentials({ email : '', password : '' })
             
             const profileRef = db.collection('user_profile');
             var profile = profileRef.where("uid", "==", user.uid);
             profile.get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        // doc.data() is never undefined for query doc snapshots
-                        console.log(doc.data().username + "'s Profile Obtained");
-                        setCurrentUser(doc.data().username);
-                        setRender(2)
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.data().username + "'s Profile Obtained");
+                setCurrentUser(doc.data().username);
+                setRender(2)
+                setLoginCredentials(credentials)
 
                     });
                 })

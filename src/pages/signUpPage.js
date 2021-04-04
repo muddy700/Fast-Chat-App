@@ -144,7 +144,7 @@ export default function SignUp({setSignBit}){
   const onFinish = (e) => {
     e.preventDefault();
     const validation = formValidator(e);
-    console.log(validation)
+    // console.log(validation)
     setIsNameTaken(false);
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -176,35 +176,35 @@ export default function SignUp({setSignBit}){
       
       //else
       if(validation) {
-        // firebase.auth().createUserWithEmailAndPassword(email, password)
-        // .then((userCredential) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
           // Signed in 
           console.log('User Created Successful')
-          setSignUpCredentials({ username : '', email : '', password : '' })
-          // var user = userCredential.user;
+          var user = userCredential.user;
           
           //Create UserProfile
-            //     const newProfile = {
-            //         uid: user.uid,
-            //         username : username
-            //     }
+          const newProfile = {
+            uid: user.uid,
+            username : username
+          }
+          
+          profileRef.add(newProfile)
+          .then((docRef) => {
+            console.log("Profile Created Successful ");
+            setSignBit(1);
+            setSignUpCredentials({ username : '', email : '', password : '' })
+                    })
+                    .catch((error) => {
+                        console.error("Error While Creating Profile: ", error);
+                    });
 
-            //     profileRef.add(newProfile)
-            //         .then((docRef) => {
-            //             console.log("Profile Created Successful ");
-            //             setSignBit(1);
-            //         })
-            //         .catch((error) => {
-            //             console.error("Error While Creating Profile: ", error);
-            //         });
-
-            // })
-            // .catch((error) => {
-            //     // var errorCode = error.code;
-            //     var errorMessage = error.message;
-            //     console.log('Error While Creating User ' + errorMessage)
-            //     // ..
-            // });
+            })
+            .catch((error) => {
+                // var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log('Error While Creating User ' + errorMessage)
+                // ..
+            });
         }
         else {
           console.log('The Sign Up Form Is Not Valid')
