@@ -59,24 +59,83 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login({setCurrentUser, setRender}){
   const classes = useStyles();
+  const credentials = {
+    email : '',
+    password : ''
+  }
   const [signBit, setSignBit] = useState(1)
+  const [loginCredentials, setLoginCredentials] = useState(credentials)
+  const [emailError, setEmailerror] = useState(false)
+  const [passwordError, setpasswordError] = useState(false)
+  const [emailErrorMessage, setEmailErrorMessage] = useState('')
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [isFormClear, setIsFormClear] = useState(false)
   
 
   const changeForm = () => {
     setSignBit(2)
   }
-  const onFinish = (e) => {
+
+  const handleLoginCredentials = (e) => {
+    e.preventDefault()
+    setLoginCredentials({...loginCredentials, [e.target.name] : e.target.value})
+    if(e.target.name === 'email') {
+      setEmailerror(false)
+    }
+    if(e.target.name === 'password') {
+      setpasswordError(false)
+    }
+  }
+
+  const formValidator = (e) => {
     e.preventDefault()
     const email = e.target.email.value;
     const password = e.target.password.value;
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailResult = re.test(email)
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            // Signed in
-            var user = userCredential.user;
-            // const uid = user.uid;
+    //For Email Validation
+    if(email === '') {
+      setEmailerror(true)
+      setEmailErrorMessage('Email Cannot Be Blank!')
+      return false;
+    }
+    else if (!emailResult) {
+      setEmailerror(true)
+      setEmailErrorMessage('Enter A Valid Email')
+      return false;
+    }
+    else if(password === '') {
+      setpasswordError(true)
+      setPasswordErrorMessage('Password Cannot Be Blank!')
+      return false;
+    }
+    else {
+      // setLoginCredentials({ email : '', password : '' })
+      setEmailerror(false);
+      setpasswordError(false);
+      setEmailErrorMessage('');
+      setPasswordErrorMessage('');
+      return true;
+    }
+
+  }
+  const onFinish = (e) => {
+    e.preventDefault()
+    const validation = formValidator(e);
+    console.log(validation)
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    
+    if(validation) {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        var user = userCredential.user;
+        // const uid = user.uid;
             console.log('Logged Successful...');
-
+            setLoginCredentials({ email : '', password : '' })
+            
             const profileRef = db.collection('user_profile');
             var profile = profileRef.where("uid", "==", user.uid);
             profile.get()
@@ -95,9 +154,16 @@ export default function Login({setCurrentUser, setRender}){
         })
         .catch((error) => {
             // var errorCode = error.code;
+            //Check Error Codes To Modify Message
             var errorMessage = error.message;
             console.log('Logging In Failed. Error Occured : ' + errorMessage)
+            setEmailerror(true)
+            setEmailErrorMessage('Incorrect Email Or Password!')
         });
+    }
+    else {
+      console.log('The Form Is Invalid')
+    }
   }
 
   const signin =       <div className={classes.paper}>
@@ -107,28 +173,34 @@ export default function Login({setCurrentUser, setRender}){
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={onFinish}>
+        <form className={classes.form}  name="loginForm" noValidate={false} onSubmit={onFinish}>
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             id="username"
             label="Email"
             name="email"
-            autoComplete="username"
+            autoComplete="email"
             autoFocus
+            onChange={handleLoginCredentials}
+            error={emailError}
+            helperText={emailError  ?  emailErrorMessage : ''}
+            value={loginCredentials.email}
           />
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
+            onChange={handleLoginCredentials}
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
+            error={passwordError}
+            helperText={passwordError ? passwordErrorMessage : ''}
+            value={loginCredentials.password}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
