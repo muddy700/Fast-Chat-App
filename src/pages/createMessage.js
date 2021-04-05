@@ -26,16 +26,10 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
     const messageValidator = (e) => {
         e.preventDefault();
         const receiver = e.target.destination.value;
-        const isReceiverExist = true;
 
         if(receiver === '') {
             setReceiverError(true)
             setReceiverErrorMessage('Receiver Cannot Be Blank!')
-            return false;
-        }
-        else if(!isReceiverExist) {
-            setReceiverError(true)
-            setReceiverErrorMessage('Receiver Does Not Exist')
             return false;
         }
         else {
@@ -57,6 +51,7 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
             const messageTime = currentTime.toLocaleTimeString();
             const dateCreated = currentTime.toLocaleString();
             const messagesRef = db.collection('messages');
+
             const messageData = {
                 source: username,
                 destination: message.destination,
@@ -65,15 +60,26 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
                 messageDate: messageDate,
                 messageTime: messageTime
             }
-            messagesRef.add(messageData)
-            .then((docRef) => {
-                setSelectedChat(message.destination);
-                setActiveCard(4);
-                setMessage(initialMessage)
-                })
-                .catch((error) => {
-                });
-            // setMessage(initialMessage);
+
+            const profileRef = db.collection('user_profile');
+            profileRef.where('username', '==', message.destination).get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        setReceiverError(true)
+                        setReceiverErrorMessage('Receiver Does Not Exist!')
+                    } 
+                    else {
+                        messagesRef.add(messageData)
+                        .then((docRef) => {
+                                setSelectedChat(message.destination);
+                                setActiveCard(4);
+                                setMessage(initialMessage)
+                            })
+                    }
+                    })
+                    .catch((error) => {
+                        console.log('error getting receiver' + error)
+                    });
         }
         else {
             // console.log('Message Form Is Not Valid')

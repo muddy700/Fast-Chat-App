@@ -20,6 +20,8 @@ export const Home = ({username, setCurrentUser, setRender})=> {
     const [senders, setSenders] = useState([])
     const [senderMessages, setSenderMessages] = useState([])
     const [selectedChat, setSelectedChat] = useState('')
+    const [lastIn, setLastIn] = useState({})
+    const [lastOut, setLastOut] = useState([])
    
     useEffect(() => {
     const messageRef = db.collection('messages');
@@ -29,7 +31,7 @@ export const Home = ({username, setCurrentUser, setRender})=> {
      setSenders(Array.from(new Set( snapshot.docs.map((doc) => doc.data().source))))
     ));
     // getSenderMessages();
-   
+
     // getSenders()
 }, [])
 
@@ -43,6 +45,29 @@ export const Home = ({username, setCurrentUser, setRender})=> {
         //     setSenderMessages(sm);
     }
 
+    // const getTheLastMessage = () => {
+    //   const messageRef = db.collection('messages');
+    //   messageRef.orderBy("name", "desc").limit(3);
+    //   var msg1 = messageRef.where("destination", "==", username).where("source", "==", 'user2').orderBy("dateCreated", "desc").limit(1);
+    //   var msg2 = messageRef.where("source", "==", username).where("destination", "==", 'user2')
+    //       .orderBy("dateCreated", "desc").limit(1);
+
+    //        msg1.onSnapshot(snapshot => (
+    //            setLastIn(snapshot.docs.map((doc) => doc.data()))
+    //            ));
+    //            msg2.onSnapshot(snapshot => (
+    //            setLastOut(snapshot.docs.map((doc) => doc.data()))
+    //        ));
+
+    //        var latest= [];
+    //        latest.push(lastIn)
+    //        latest.push(lastOut)
+    //     //    console.log(
+    //     //    latest.sort((a, b) => a.messageTime - b.messageTime))
+    // }
+
+    // getTheLastMessage();
+    
     const signOut = () => {
         setRender(1)
         setCurrentUser('No Logged User');
@@ -67,6 +92,21 @@ export const Home = ({username, setCurrentUser, setRender})=> {
     const inbox = <div>
                     <HomeHeader messageCounter={messages.length} signOut={signOut} setActiveCard={setActiveCard}  />
                     <div className="inbox-card" >
+                        <Card 
+                            className="message-card" 
+                            onClick={e => {e.preventDefault(); openChatMessages('Admin')}}
+                            >
+                            <CardHeader
+                                style={{width: '80%'}}
+                                avatar={<Avatar aria-label="recipe" className="">
+                                A </Avatar> }
+                                title ='Admin'
+                                subheader = "Click To View The Message"
+                            />
+                            <CardContent style={{width: '20%'}}>
+                                <p>Time</p>
+                            </CardContent>
+                        </Card>
                         {senders.map((mb) => (
                         <Card 
                             className="message-card" 

@@ -108,14 +108,23 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
       <div className="new-message-card" >
         <MiniHeader title={chatMate} setActiveCard={setActiveCard} />
         <div className="chat-container">
-        {incomingMessages.concat(outgoingMessages).map((message) => (
-            <p 
-                className={message.source === username ? "outgoing-messages" : "incoming-messages"} >
-                {message.content}
-                </p>
-        ))}
+        {
+            chatMate === "Admin" ? 
+            <p className="incoming-messages">
+                    Hellow {username}!, Welcome To Our App.
+                    Share Whatever You Like With Your Mates.
+            </p> : 
+            incomingMessages.concat(outgoingMessages).map((message) => (
+            <p className={message.source === username ? "outgoing-messages" : "incoming-messages"} key={message.dateCreated}>
+                {message.content} 
+            </p>))
+        }
         </div>
             <Paper component="form" className={classes.root}>
+                {chatMate === "Admin" ? 
+                <p style={{width: '100%', textAlign: 'center    '}}>
+                Sender Does Not Allow Replies</p> : 
+                <>
                 <InputBase
                     className={classes.input}
                     placeholder = "Reply Here.."
@@ -132,7 +141,8 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
                     disabled={!message.content ? true : false} 
                     onClick={sendMessage}>
                     <SendIcon />
-                </IconButton>
+                </IconButton>  </>
+                }
             </Paper>
     </div>
   );

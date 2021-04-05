@@ -18,10 +18,10 @@
 .chat-container {
     padding: 2%;
     overflow-y: auto;
-    height: auto;
-    max-height: 82vh;
-    min-height: 74vh;
-    /* height: 82vh; */
+    /* height: auto; */
+    /* max-height: 82vh; */
+    /* min-height: 74vh; */
+    height: 82vh;
 }
 
 /* Hide scrolbar for chrome, safari and opera */

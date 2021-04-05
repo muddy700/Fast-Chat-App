@@ -6,7 +6,7 @@ import {Home } from './pages/homePage';
 const App = () => {
 
   const [render, setRender] = useState(1)
-  const [currentUser, setCurrentUser] = useState('user1')
+  const [currentUser, setCurrentUser] = useState('No Logged User')
 
   const loginPage = <Login setCurrentUser={setCurrentUser} setRender={setRender} />
   const homePage = <Home username={currentUser} setCurrentUser={setCurrentUser} setRender={setRender}/>
