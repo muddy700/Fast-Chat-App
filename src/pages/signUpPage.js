@@ -6,9 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -17,10 +14,6 @@ import "firebase/firestore";
 import db from '../firebase'
 
 const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -49,7 +42,6 @@ export default function SignUp({setSignBit, setOpenBackDrop}){
       email: '',
       password: ''
   }
-  const [isNameTaken, setIsNameTaken] = useState(false)
   const [signUpCredentials, setSignUpCredentials] = useState(credentials)
   const [usernameError, setUsernameError] = useState(false)
   const [emailError, setEmailerror] = useState(false)
@@ -81,7 +73,7 @@ export default function SignUp({setSignBit, setOpenBackDrop}){
     const username = e.target.username.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailResult = re.test(email)
 
     //For Email Validation
@@ -115,24 +107,7 @@ export default function SignUp({setSignBit, setOpenBackDrop}){
       setPasswordErrorMessage('Use AtLeast Six Characters')
       return false;
     }
-    //  if (!(/^[a-zA-Z]*$/.test(secondKey.value)))
-    // else if (!(/^[a-z]*$/.test(password))) {
-    //   setPasswordError(true)
-    //   setPasswordErrorMessage('Include AtLeast One Lowercase Letter')
-    //   return false;
-    // }
-    // else if (!(/^[0-9]*$/.test(password))) {
-    //   setPasswordError(true)
-    //   setPasswordErrorMessage('Include AtLeast One Numerical Value')
-    //   return false;
-    // }
-    // else if (!(/^[A-Z]*$/.test(password))) {
-    //   setPasswordError(true)
-    //   setPasswordErrorMessage('Include AtLeast One UpperCase Letter')
-    //   return false;
-    // }
     else {
-      // setLoginCredentials({ email : '', password : '' })
       setUsernameError(false);
       setEmailerror(false);
       setPasswordError(false);
@@ -140,13 +115,12 @@ export default function SignUp({setSignBit, setOpenBackDrop}){
       setPasswordErrorMessage('');
       return true;
     }
-    
   }
+  
   const onFinish = (e) => {
     e.preventDefault();
     setOpenBackDrop(true)
     const validation = formValidator(e);
-    // console.log(validation)
     const email = e.target.email.value;
     const password = e.target.password.value;
     const username = e.target.username.value;

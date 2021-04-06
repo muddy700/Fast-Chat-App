@@ -34,7 +34,6 @@ function Copyright() {
 }
 
 //End Of Copyright Function
-
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -73,17 +72,8 @@ export default function Login({setCurrentUser, setRender}){
   const [passwordError, setPasswordError] = useState(false)
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
-  const [isFormClear, setIsFormClear] = useState(false)
   const [openBackDrop, setOpenBackDrop] = useState(false)
   
-  const closeBackDrop = () => {
-    setOpenBackDrop(false);
-  };
-
-  // const handleToggle = () => {
-  //   setOpenBackDrop(!openBackDrop);
-  // };
-
   const changeForm = () => {
     setSignBit(2)
   }
@@ -103,10 +93,9 @@ export default function Login({setCurrentUser, setRender}){
     e.preventDefault()
     const email = e.target.email.value;
     const password = e.target.password.value;
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailResult = re.test(email)
 
-    //For Email Validation
     if(email === '') {
       setEmailerror(true)
       setEmailErrorMessage('Email Cannot Be Blank!')
@@ -123,7 +112,6 @@ export default function Login({setCurrentUser, setRender}){
       return false;
     }
     else {
-      // setLoginCredentials({ email : '', password : '' })
       setEmailerror(false);
       setPasswordError(false);
       setEmailErrorMessage('');
@@ -136,14 +124,12 @@ export default function Login({setCurrentUser, setRender}){
     e.preventDefault()
     setOpenBackDrop(true)
     const validation = formValidator(e);
-    // console.log(validation)
     const email = e.target.email.value;
     const password = e.target.password.value;
     
     if(validation) {
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        // Signed in
         var user = userCredential.user;
             const profileRef = db.collection('user_profile');
             var profile = profileRef.where("uid", "==", user.uid);
@@ -165,11 +151,10 @@ export default function Login({setCurrentUser, setRender}){
             setOpenBackDrop(false)
             setEmailerror(true)
             setEmailErrorMessage('Incorrect Email Or Password!')
-            
         });
     }
     else {
-      console.log('The Login Form Is Invalid')
+      // console.log('The Login Form Is Invalid')
       setOpenBackDrop(false)
     }
   }
@@ -264,7 +249,6 @@ export default function Login({setCurrentUser, setRender}){
       <Backdrop 
         className={classes.backdrop} 
         open={openBackDrop} 
-        // onClick={closeBackDrop}
         >
         <CircularProgress color="inherit" />
       </Backdrop>

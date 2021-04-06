@@ -1,20 +1,13 @@
 import {React, useState, useEffect } from 'react';
 import SendIcon from '@material-ui/icons/Send';
-import {Card, Button, TextField, CardContent} from '@material-ui/core';
 import db from '../firebase'
 import {MiniHeader} from './miniHeader'
 import '../cssFiles/chatPage.css'
-
-import {
-    makeStyles
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import DirectionsIcon from '@material-ui/icons/Directions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,11 +67,10 @@ export const ChatPage = ({chatMate, username, setActiveCard}) => {
               setOutgoingMessages(snapshot.docs.map((doc) => doc.data()))
           ));
 
-      }, [])
+      }, [chatMate, username])
 
     const sendMessage = (e) => {
         e.preventDefault();
-        // console.log('Message Sent');
         const currentTime = new Date();
         const messageDate = currentTime.toLocaleDateString();
         const messageTime = currentTime.toLocaleTimeString();

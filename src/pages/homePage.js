@@ -2,82 +2,32 @@ import {React, useEffect, useState} from 'react'
 import {HomeHeader } from './homeHeader'
 import '../cssFiles/homePage.css';
 import ChatIcon from '@material-ui/icons/Chat';
-import {Card, Grid, TextField, Button} from '@material-ui/core';
-import {Container, Avatar, CardHeader, CardContent, Typography, Box, Fab, IconButton, Menu, MenuItem } from '@material-ui/core';
-// import firebase from '../firebase'
+import { Avatar, CardHeader, CardContent,Card, Fab} from '@material-ui/core';
 import {CreateMessage} from './createMessage'
 import {ChatPage} from './chatPage'
 import { Profile} from './profilePage'
 import db from '../firebase'
 import Tooltip from '@material-ui/core/Tooltip';
 
-
-
 export const Home = ({username, setCurrentUser, setRender})=> {
  
-    const [messages, setMessages] = useState([]);
     const [activeCard, setActiveCard] = useState(1)
     const [senders, setSenders] = useState([])
-    const [senderMessages, setSenderMessages] = useState([])
     const [selectedChat, setSelectedChat] = useState('')
-    const [lastIn, setLastIn] = useState({})
-    const [lastOut, setLastOut] = useState([])
    
     useEffect(() => {
     const messageRef = db.collection('messages');
     var msg = messageRef.where("destination", "==", username);
     msg.onSnapshot(snapshot => (
-     setMessages( snapshot.docs.map((doc) => doc.data()) ),
      setSenders(Array.from(new Set( snapshot.docs.map((doc) => doc.data().source))))
     ));
-    // getSenderMessages();
 
-    // getSenders()
-}, [])
+}, [username])
 
-    const getSenderMessages = () => {
-        // var sm = [];
-        //     for(let s = 0; s<senders.length; s++) {
-        //        sm[s] = messages.filter((msg) => msg.source === senders[s])
-        //        sm[s].sender = senders[s];
-        //     }
-        //     // console.log(sm)
-        //     setSenderMessages(sm);
-    }
-
-    // const getTheLastMessage = () => {
-    //   const messageRef = db.collection('messages');
-    //   messageRef.orderBy("name", "desc").limit(3);
-    //   var msg1 = messageRef.where("destination", "==", username).where("source", "==", 'user2').orderBy("dateCreated", "desc").limit(1);
-    //   var msg2 = messageRef.where("source", "==", username).where("destination", "==", 'user2')
-    //       .orderBy("dateCreated", "desc").limit(1);
-
-    //        msg1.onSnapshot(snapshot => (
-    //            setLastIn(snapshot.docs.map((doc) => doc.data()))
-    //            ));
-    //            msg2.onSnapshot(snapshot => (
-    //            setLastOut(snapshot.docs.map((doc) => doc.data()))
-    //        ));
-
-    //        var latest= [];
-    //        latest.push(lastIn)
-    //        latest.push(lastOut)
-    //     //    console.log(
-    //     //    latest.sort((a, b) => a.messageTime - b.messageTime))
-    // }
-
-    // getTheLastMessage();
-    
     const signOut = () => {
         setRender(1)
         setCurrentUser('No Logged User');
-        setMessages([]);
         setActiveCard(1);
-    }
-    const getSenders = () => {
-        // const messageSenders = messages.map((msg) => msg.source)
-        // const uniqueSenders = Array.from(new Set(messageSenders));
-        // setSenders(uniqueSenders);
     }
 
     const openChatMessages = (sender) => {
@@ -90,7 +40,7 @@ export const Home = ({username, setCurrentUser, setRender})=> {
         setActiveCard(2)
     }
     const inbox = <div>
-                    <HomeHeader messageCounter={messages.length} signOut={signOut} setActiveCard={setActiveCard}  />
+                    <HomeHeader messageCounter={senders.length} signOut={signOut} setActiveCard={setActiveCard}  />
                     <div className="inbox-card" >
                         <Card 
                             className="message-card" 

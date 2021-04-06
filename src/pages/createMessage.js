@@ -37,14 +37,12 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
             setReceiverErrorMessage('')
             return true
         }
-
     }
 
     const sendMessage = (e) => {
         e.preventDefault();
         const currentTime = new Date();
         const validation = messageValidator(e);
-        console.log(validation)
         
         if(validation) {
             const messageDate = currentTime.toLocaleDateString();
@@ -72,8 +70,8 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
                         messagesRef.add(messageData)
                         .then((docRef) => {
                                 setSelectedChat(message.destination);
-                                setActiveCard(4);
                                 setMessage(initialMessage)
+                                setActiveCard(4);
                             })
                     }
                     })
@@ -82,7 +80,7 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
                     });
         }
         else {
-            // console.log('Message Form Is Not Valid')
+        //     // console.log('Message Form Is Not Valid')
         }
     }
     
@@ -116,9 +114,6 @@ export const CreateMessage = ({username, setActiveCard, setSelectedChat}) => {
                     rows={5}
                     value={message.content}
                     onChange={handleMessageForm}
-                    // error
-                    // helperText="Error Message" 
-
                 />
                 <Button 
                     style={{marginTop: 20}} 

@@ -1,9 +1,6 @@
 .home-container {
   position: relative;
   height: 100vh;
-  /* height: 600px; */
-  /* border-radius: 20px; */
-  /* overflow: scroll; */
   width: 100%;
   max-width: 500px;
 }
@@ -22,7 +19,6 @@
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     height: 90vh;
-    /* height: inherit; */
 }
 
 .new-message-card {
